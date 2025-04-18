@@ -18,7 +18,7 @@ Mode = [
 ]
 
 def clear_fields():
-    st.session_state['mode_payment']=' '
+    st.session_state['mode_payment']=''
     st.session_state['amount_payment']=' '
     st.session_state['reason_payment']=' '
     st.session_state['comments_payment']=' '
