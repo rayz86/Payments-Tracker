@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_gsheets import GSheetsConnection
+from st_gsheets_connection import connect
 import datetime
 import pandas as pd
 #url = "https://docs.google.com/spreadsheets/d/1S7zTgFp66suc3J583pTQJXKcNUgRfzvJC5XG45DXbxs/edit?gid=0#gid=0"
@@ -8,7 +8,7 @@ st.markdown("Rayyan's personal account keeper!")
 
 if "mode_payment" not in st.session_state:
     st.session_state["mode_payment"] = "Select Mode"
-conn=st.connection("gsheets", type=GSheetsConnection)
+conn=connect("gsheets")
 
 existing_data=conn.read(worksheet="daily", usecols=list(range(5)), ttl=5)
 
