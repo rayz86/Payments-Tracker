@@ -6,13 +6,15 @@ import pandas as pd
 st.title("Payments-Tracker")
 st.markdown("Rayyan's personal account keeper!")
 
+if "mode_payment" not in st.session_state:
+    st.session_state["mode_payment"] = "Select Mode"
 conn=st.connection("gsheets", type=GSheetsConnection)
 
 existing_data=conn.read(worksheet="daily", usecols=list(range(5)), ttl=5)
 
 
 Mode = [
-    "Select Mode"
+    "Select Mode",
     "UPI",
     "CASH",
     "CARD",
@@ -26,7 +28,7 @@ def clear_fields():
 
 with st.form(key="payments_tracker"):
     selected_date = st.date_input("Select a Date", value=datetime.date.today())
-    mode_payment = st.selectbox("Mode of Payment", options=Mode, index=Mode.index(st.session_state.get("mode_payment", "Select Mode")))
+    mode_payment = st.selectbox("Mode of Payment", options=Mode, index=Mode.index(st.session_state.get("mode_payment")))
     amount_payment = st.text_area("Amount", value=st.session_state.get("amount_payment", ""))
     reason_payment = st.text_area("Reason", value=st.session_state.get("reason_payment", ""))
     comments_payment = st.text_area("Comments", value=st.session_state.get("comments_payment", ""))
@@ -35,7 +37,7 @@ with st.form(key="payments_tracker"):
     clear_button = st.form_submit_button(label='Clear all fields')
     if clear_button:
         clear_fields()
-        st.rerun()
+        
     if submit_button:
         
         if mode_payment == "Select Mode" or not amount_payment.strip() or not reason_payment.strip():
