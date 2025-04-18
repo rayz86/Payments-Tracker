@@ -12,23 +12,24 @@ existing_data=conn.read(worksheet="daily", usecols=list(range(5)), ttl=5)
 
 
 Mode = [
+    "Select Mode"
     "UPI",
     "CASH",
     "CARD",
 ]
 
 def clear_fields():
-    st.session_state['mode_payment']=''
-    st.session_state['amount_payment']=' '
-    st.session_state['reason_payment']=' '
-    st.session_state['comments_payment']=' '
+    st.session_state['mode_payment']='Select Mode'
+    st.session_state['amount_payment']=''
+    st.session_state['reason_payment']=''
+    st.session_state['comments_payment']=''
 
 with st.form(key="payments_tracker"):
-    selected_date =st.date_input(label="Select a Date")
-    mode_payment=st.selectbox("Mode of Payment",options=Mode, index=None)
-    amount_payment=st.text_area(label="Amount")
-    reason_payment=st.text_area(label="Reason")
-    comments_payment=st.text_area(label="Comments")
+    selected_date = st.date_input("Select a Date", value=datetime.date.today())
+    mode_payment = st.selectbox("Mode of Payment", options=Mode, index=Mode.index(st.session_state.get("mode_payment", "Select Mode")))
+    amount_payment = st.text_area("Amount", value=st.session_state.get("amount_payment", ""))
+    reason_payment = st.text_area("Reason", value=st.session_state.get("reason_payment", ""))
+    comments_payment = st.text_area("Comments", value=st.session_state.get("comments_payment", ""))
     
     submit_button = st.form_submit_button("Add Payment")
     clear_button = st.form_submit_button(label='Clear all fields')
@@ -37,7 +38,7 @@ with st.form(key="payments_tracker"):
         st.rerun()
     if submit_button:
         
-        if not mode_payment or not Mode:
+        if mode_payment == "Select Mode" or not amount_payment.strip() or not reason_payment.strip():
             st.warning("Ensure all mandatory fields are filled!")
             st.stop()
             
